@@ -1,0 +1,16 @@
+.myclass{
+   color:steelblue
+}
+
+.error {
+       color: blue
+   }
+
+/*
+input[type="radio"]{
+     margin: 0 10px;
+   }
+*/
+.form-radio-item {
+    margin-top: 5px;
+  }

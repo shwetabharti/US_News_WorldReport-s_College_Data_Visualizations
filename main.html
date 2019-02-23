@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head>
+    <style>
+        .bar {
+        }
+        .arc text {
+          font: 10px sans-serif;
+          text-anchor: middle;
+        }
+        .arc path {
+          stroke: #fff;
+        }
+        .text{
+           text-align: middle;
+           stroke: black;
+           opacity: 1;
+           stroke-width: 8;
+        }
+        .radio{
+        	text-align: center;
+        }
+        .row{
+        	text-align: center;
+        }
+        .highlight {
+            fill: steelblue;
+        }
+        /*Ref: http://jsfiddle.net/5PENv/*/
+        #tooltip {
+            position: absolute;
+            width: 50px;
+            height: auto;
+            padding: 10px;
+            background-color: white;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+            -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
+            box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4) pointer-events: none;
+        }
+        #tooltip.hidden {
+            opacity: 0;
+        }
+        #tooltip p {
+            margin: 0;
+            font-family: sans-serif;
+            font-size: 16px;
+            line-height: 20px;
+        }
+    </style>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css"></link>
+<body bgcolor= "#d4d4aa">
+
+  <div class='container'>
+    <div class='row'>
+    <h3>US News and World Report Dataset</h3>
+          <h4>Statistics for a large number of US Colleges from the 1995 issue of US News and World Report with
+             777 observations on the following 10 variables.</h4>
+            <div class='radio'>
+              <label class='radio-inline'>
+                <input type="radio" name="variable" value="Top10perc" onclick='updateVariable(this.value)'>Top_10%_HS_Students
+                <input type="radio" name="variable" value="Top25perc" onclick='updateVariable(this.value)' checked>Top_25%_HS_Students
+                <input type="radio" name="variable" value="Outstate" onclick='updateVariable(this.value)'>OutOfState_Tuition
+                <input type="radio" name="variable" value="Grad_Rate" onclick='updateVariable(this.value)'>Graduation_Rate
+                <input type="radio" name="variable" value="Room_Board" onclick='updateVariable(this.value)'>Room_Board_Cost
+                </br>
+                <input type="radio" name="variable" value="Books" onclick='updateVariable(this.value)'>Books_Cost
+                <input type="radio" name="variable" value="Personal" onclick='updateVariable(this.value)'>Personal_Spending
+                <input type="radio" name="variable" value="PhD" onclick='updateVariable(this.value)'>Faculty%_with_phDs
+                <input type="radio" name="variable" value="SF_Ratio" onclick='updateVariable(this.value)'>Student_Faculty_Ratio
+                <input type="radio" name="variable" value="perc_alumni" onclick='updateVariable(this.value)'>Alumni%_Donating
+              </label>
+            </div>
+
+    </div>
+  </div>
+
+  <div align="right">
+      <p><a href="force_directed.html"> <button>Force-Directed Layout</button></a></p>
+  </div>
+  <div id="tooltip" class="hidden">
+      <p><strong><span id="value"></span></strong></p>
+  </div>
+
+  <p>
+      <label for="nBins"
+             style="display: inline-block; width: 240px; text-align: right">
+             No of Bins = <span id="nBins-value">6</span>
+      </label>
+      <input type="range" min="1" max="16" step="1" value="10" id="nBins">
+  </p>
+
+  <svg width="950" height="500"></svg>
+<script type = "text/javascript" src="js/main.js"> </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 1;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 0.5px;
+}
+
+div{
+}
+
+text {
+  font-family: sans-serif;
+  font-size: 12px;
+}
+</style>
+<body bgcolor= "#d4d4aa">
+  <div>
+  <h2> <center>US News and World Report Dataset</center></h2>
+  </div>
+    <div>
+        <h3><center>Forced Directed Layout from a subset of US News and World Report Dataset.</center></h3>
+        <h3><center>Classifying the Universities as Public and Private and further classifying them
+           on the basis of the first letter of their name.</center></h3>
+  </div>
+<svg width="1000" height="400"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+/*Ref: https://bl.ocks.org/heybignick/3faf257bbbbc7743bb72310d03b86ee8 and TA*/
+/*Ref: https://itnext.io/d3-force-directed-graph-forces-experiments-for-dummies-20a5682935*/
+/*Ref: http://jsdatav.is/visuals.html?id=11550728*/
+var color = d3.scaleOrdinal(d3.schemeCategory10); //Color Scale defined
+var margin = 200;
+var svg = d3.select("svg"),
+    width = +svg.attr("width") - margin,
+    height = +svg.attr("height") - margin;
+
+
+var simulation = d3.forceSimulation() //Simulation for nodes array without force which manages nodes velocity
+    .force("link", d3.forceLink().id(function(d) { //Specifies force for nodes
+       return d.id;}
+     )
+    .strength(0.05)) //Lower Strength for Spreaded nodes
+    .force("charge", d3.forceManyBody()) //Charge force pushes nodes away
+    .force("center", d3.forceCenter((width+400) / 2, (height+100) / 2)); //Centering all nodes cluster at given position
+
+d3.json("data/college_json.json", function(error, data) {
+  if (error) throw error;
+
+  var link = svg.append("g") //Appending Links in the form of line based upon links field in json
+      .attr("class", "links")
+      .selectAll("line")
+      .data(data.links)
+      .enter().append("line")
+      .attr("stroke-width", function(d) { return (d.value/10); }); //Setting link-lines width
+
+  var node = svg.append("g") //Appending nodes from json file
+      .attr("class", "nodes")
+      .selectAll("g")
+      .data(data.nodes)
+      .enter().append("g")
+
+  var circles = node.append("circle") //Spcifying properties for each node (circles)
+      .attr("r",8) //Radius of node circles
+      .attr("fill", function(d) { return color(d.group);})
+      .call(d3.drag()
+          .on("start", startSimulation) //When mouse clicks a circle
+          .on("drag", contdSimulation) //When mouse drags a circle
+          .on("end", endSimulation) //Mouse drag ends.
+      );
+
+  var lables = node.append("text")
+      .text(function(d) {
+        return d.id;    //Labels are the node names. (id in json)
+      })
+      .attr("fill", "black")
+      .attr('x', 6)
+      .attr('y', 3);
+
+  node.append("title")
+      .text(function(d) { return d.id; });
+
+  simulation
+      .nodes(data.nodes)
+      .on("tick", ticked); //ticked() will be called each time the simulation iterates
+
+  /*To modify nodes velocity*/
+  simulation.force("link")
+      .links(data.links);
+
+/*Tick Event Handler*/
+  function ticked() {
+    /*Updatint positions of the links.
+    `source` and `target` properties are alreafy set by force layout*/
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    /*New values to enable node movement*/
+    node
+        .attr("transform", function(d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        })
+  }
+});
+
+function startSimulation(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function contdSimulation(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function endSimulation(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
