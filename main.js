@@ -25,7 +25,7 @@ function chartTitle(title){
 }
 
 function updateVariable(value){
-  d3.csv("data/college.csv", function(error, data) {
+  d3.csv("college.csv", function(error, data) {
                                      if (error) {
                                          throw error;
                                      }
