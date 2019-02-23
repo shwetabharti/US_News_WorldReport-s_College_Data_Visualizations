@@ -50,7 +50,7 @@ var simulation = d3.forceSimulation() //Simulation for nodes array without force
     .force("charge", d3.forceManyBody()) //Charge force pushes nodes away
     .force("center", d3.forceCenter((width+400) / 2, (height+100) / 2)); //Centering all nodes cluster at given position
 
-d3.json("data/college_json.json", function(error, data) {
+d3.json("college_json.json", function(error, data) {
   if (error) throw error;
 
   var link = svg.append("g") //Appending Links in the form of line based upon links field in json
